@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Driver;
 use App\Models\Manager;
 use App\Models\Vehicle;
 use App\Models\City;
@@ -27,6 +28,7 @@ class ManagerController extends Controller
     public function create()
     {
         
+        $data['drivers']  = Driver::orderBy('name','ASC')->get();
         $data['cities']   = City::orderBy('name','ASC')->get();
         $data['vehicles'] = Vehicle::orderBy('plate','ASC')->get();
 
@@ -51,17 +53,18 @@ class ManagerController extends Controller
 
         $user_id         = auth()->user()->id;
 
-        $data            = $request->only(['name','cities','vehicles']);
+        $data            = $request->only(['name','drivers','cities','vehicles']);
         $data['name']    = Str::title($data['name']);
         $data['user_id'] = $user_id;
 
         $manager = Manager::create($data);
         $manager->cities()->attach($data['cities'], ['user_id' => $user_id ]);
         $manager->vehicles()->attach($data['vehicles'], ['user_id' => $user_id ]);
+        $manager->drivers()->attach($data['drivers'], ['user_id' => $user_id ]);
 
-        $data_user                 = $request->only(['login','password']);
+        $data_user                 = $request->only(['email','password']);
         $data_user['name']         = $data['name'];
-        $data_user['email']        = Str::lower($data_user['login']);
+        $data_user['email']        = Str::lower($data_user['email']);
         $data_user['password']     = bcrypt(Str::lower($data_user['password']));
         $data_user['user_type_id'] = 3;
         $data_user['manager_id']   = $manager->id;
@@ -75,9 +78,11 @@ class ManagerController extends Controller
     public function edit(Request $request)
     {
 
-        $manager         = Manager::with('vehicles:id')->with('cities:id')->findOrFail($request->id);
+        $manager         = Manager::with('drivers:id')->with('vehicles:id')->with('cities:id')->findOrFail($request->id);
+        $managerDrivers  = $manager->drivers->pluck('id')->toArray();
         $managerVehicles = $manager->vehicles->pluck('id')->toArray();
         $managerCities   = $manager->cities->pluck('id')->toArray();
+        $drivers         = Driver::orderBy('name','ASC')->get();
         $cities          = City::orderBy('name','ASC')->get();
         $vehicles        = Vehicle::orderBy('plate','ASC')->get();
 
@@ -85,7 +90,7 @@ class ManagerController extends Controller
 
         $manager['login'] = $user[0]['email'];
 
-        return view('managers.edit', compact('manager','managerVehicles','managerCities','cities','vehicles'));
+        return view('managers.edit', compact('manager','managerDrivers','managerVehicles','managerCities','drivers','cities','vehicles'));
 
     }
     
@@ -115,8 +120,13 @@ class ManagerController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $data         = $request->only(['name','vehicles','cities']);
+        $data         = $request->only(['name','drivers','vehicles','cities']);
         $data['name'] = Str::title($data['name']);
+
+        $drivers = [];
+        foreach ($data['drivers'] as $driver) {
+            $drivers[$driver] = ['user_id' => $user_id];
+        }
 
         $cities = [];
         foreach ($data['cities'] as $city) {
@@ -128,6 +138,7 @@ class ManagerController extends Controller
             $vehicles[$vehicle] = ['user_id' => $user_id];
         }
 
+        $manager->drivers()->sync($drivers);
         $manager->cities()->sync($cities);
         $manager->vehicles()->sync($vehicles);
 

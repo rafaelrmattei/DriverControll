@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Vehicle;
 use App\Models\Driver;
 use App\Models\City;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->foreignIdFor(Vehicle::class)->references('id')->on('vehicles')->onUpdate('NO ACTION')->onDelete('NO ACTION');
             $table->foreignIdFor(Driver::class)->references('id')->on('drivers')->onUpdate('NO ACTION')->onDelete('NO ACTION');
             $table->foreignIdFor(City::class)->references('id')->on('cities')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreignIdFor(User::class)->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
             $table->timestamps();
             $table->softDeletes();
         });

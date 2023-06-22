@@ -20,7 +20,7 @@
         @foreach ($cities as $city)
           <tr class="dark:bg-blue-50 hover:bg-blue-300 dark:hover:bg-blue-300 text-gray-600 hover:text-blue-50 transition-colors font-medium ">
             <th scope="row" class="px-6 py-4 whitespace-nowrap">{{ $city->name }}</th>
-            <td class="px-6 py-4 text-right">
+            <td class="px-6 py-4 text-right whitespace-nowrap">
               <a href="{{ route('cities.edit', $city->id) }}" class="font-medium text-blue-400 hover:text-blue-50 transition-colors">Editar</a>
               <a href="{{ route('cities.destroy', $city->id) }}" class="font-medium text-blue-400 hover:text-blue-50 transition-colors ml-3" onclick="return confirm('Confirma a exclusão do município {{ $city->name }}?');">Excluir</a>
             </td>

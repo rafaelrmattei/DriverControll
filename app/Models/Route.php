@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\City;
+use App\Models\User;
 use App\Models\RouteExpense;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,12 +23,14 @@ class Route extends Model
         'driver_id',
         'vehicle_id',
         'city_id',
+        'user_id',
     ];
 
     protected $hidden = [
         'driver_id',
         'vehicle_id',
         'city_id',
+        'user_id',
     ];
 
     public function vehicle(){
@@ -40,6 +43,10 @@ class Route extends Model
 
     public function city(){
         return $this->belongsTo(City::class)->withTrashed();
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function expenses(){

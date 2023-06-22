@@ -11,7 +11,12 @@
         </div>
         @can('isAdmin')
           <div class="flex justify-center lg:mb-4">
-            <a href="{{ route('drivers') }}" class="lg:flex lg:justify-center lg:rounded-md lg:p-[5px] lg:shadow-lg {{ $navBarActive == 'drivers' ? 'lg:bg-green-400' : 'lg:bg-white' }}" title="Motoristas">
+            <a href="{{ route('managers') }}" class="lg:flex lg:justify-center lg:rounded-md lg:p-[5px] lg:shadow-lg {{ $navBarActive == 'managers' ? 'lg:bg-green-400' : 'lg:bg-white' }}" title="Gerentes">
+              <img src="{{ asset('img/manager.svg') }}" alt="Gerentes" class="{{ $navBarActive == 'managers' ? 'brightness-[1] lg:brightness-[4]' : 'brightness-[4] lg:brightness-[1]' }} 2xl:p-[5px] max-h-8 lg:max-h-none">
+            </a>
+          </div>
+          <div class="flex justify-center lg:mb-4">
+            <a href="{{ route('drivers') }}" class="ml-4 lg:ml-0 lg:flex lg:justify-center lg:rounded-md lg:p-[5px] lg:shadow-lg {{ $navBarActive == 'drivers' ? 'lg:bg-green-400' : 'lg:bg-white' }}" title="Motoristas">
               <img src="{{ asset('img/wheel.svg') }}" alt="Motoristas" class="{{ $navBarActive == 'drivers' ? 'brightness-[1] lg:brightness-[4]' : 'brightness-[4] lg:brightness-[1]' }} 2xl:p-[5px] max-h-8 lg:max-h-none">
             </a>
           </div>

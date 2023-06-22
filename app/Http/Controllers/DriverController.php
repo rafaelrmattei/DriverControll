@@ -59,9 +59,9 @@ class DriverController extends Controller
         $driver->cities()->attach($data['cities'], ['user_id' => $user_id ]);
         $driver->vehicles()->attach($data['vehicles'], ['user_id' => $user_id ]);
 
-        $data_user                 = $request->only(['login','password']);
+        $data_user                 = $request->only(['email','password']);
         $data_user['name']         = $data['name'];
-        $data_user['email']        = Str::lower($data_user['login']);
+        $data_user['email']        = Str::lower($data_user['email']);
         $data_user['password']     = bcrypt(Str::lower($data_user['password']));
         $data_user['user_type_id'] = 2;
         $data_user['driver_id']    = $driver->id;

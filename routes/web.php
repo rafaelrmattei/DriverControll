@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RouteController;
+use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\CityController;
@@ -40,6 +41,13 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/veiculos/edita/{id}',      [VehicleController::class, 'edit'])->name('vehicles.edit');
         Route::post('/veiculos/atualiza',       [VehicleController::class, 'update'])->name('vehicles.update');
         Route::get('/veiculos/exclui/{id}',     [VehicleController::class, 'destroy'])->name('vehicles.destroy');
+
+        Route::get('/gerentes',                 [ManagerController::class, 'index'])->name('managers');
+        Route::get('/gerentes/novo',            [ManagerController::class, 'create'])->name('managers.create');
+        Route::post('/gerentes/grava',          [ManagerController::class, 'store'])->name('managers.store');
+        Route::get('/gerentes/edita/{id}',      [ManagerController::class, 'edit'])->name('managers.edit');
+        Route::post('/gerentes/atualiza',       [ManagerController::class, 'update'])->name('managers.update');
+        Route::get('/gerentes/exclui/{id}',     [ManagerController::class, 'destroy'])->name('managers.destroy');
 
         Route::get('/motoristas',               [DriverController::class, 'index'])->name('drivers');
         Route::get('/motoristas/novo',          [DriverController::class, 'create'])->name('drivers.create');

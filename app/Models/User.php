@@ -6,6 +6,7 @@ use App\Models\UserType;
 use App\Models\Vehicle;
 use App\Models\Driver;
 use App\Models\City;
+use App\Models\Route;
 use App\Models\DriverCity;
 use App\Models\DriverVehicle;
 use App\Models\Manager;
@@ -80,6 +81,10 @@ class User extends Authenticatable
 
     public function cities(){
         return $this->hasMany(City::class)->withTrashed();
+    }
+
+    public function routes(){
+        return $this->hasMany(Route::class)->withTrashed();
     }
 
     public function driverCities(){

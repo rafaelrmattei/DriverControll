@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Route;
 use App\Models\Vehicle;
 use App\Models\Driver;
+use App\Models\Manager;
 use App\Models\City;
 use App\Models\Expense;
 use App\Models\RouteExpense;
@@ -24,6 +25,8 @@ class RouteController extends Controller
             $data['routes'] = Route::with('expenses')->orderBy('date','DESC')->orderBy('created_at', 'desc')->get();
         } else if(auth()->user()->user_type_id == 2){
             $data['routes'] = Route::with('expenses')->where('driver_id',auth()->user()->driver_id)->orderBy('date','DESC')->orderBy('created_at', 'desc')->latest()->take(7)->get();
+        } else if(auth()->user()->user_type_id == 3){
+            $data['routes'] = Route::with('expenses')->where('user_id',auth()->user()->id)->orderBy('date','DESC')->orderBy('created_at', 'desc')->latest()->take(7)->get();
         }
 
         return view('routes.list', $data);
@@ -44,8 +47,14 @@ class RouteController extends Controller
             $driver           = Driver::find(auth()->user()->driver_id);
             $data['drivers']  = new Collection([$driver]);
             $data['vehicles'] = $driver->vehicles;
-            $data['vehicles'] = $driver->vehicles;
             $data['cities']   = $driver->cities;
+
+        } else if(auth()->user()->user_type_id == 3){
+
+            $manager          = Manager::find(auth()->user()->manager_id);
+            $data['drivers']  = $manager->drivers;
+            $data['vehicles'] = $manager->vehicles;
+            $data['cities']   = $manager->cities;
 
         }
 
@@ -58,8 +67,9 @@ class RouteController extends Controller
     public function store(Request $request)
     {
 
-        $route    = $request->only(['date','driver_id','vehicle_id','city_id','km_initial','km_final','supply','expense']);       
-        $route    = Route::create($route);
+        $route            = $request->only(['date','driver_id','vehicle_id','city_id','km_initial','km_final','supply','expense']);  
+        $route['user_id'] = auth()->user()->id;
+        $route            = Route::create($route);
 
         if($request->filled('supply')){
             $keys = array_keys($request['supply']);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Route;
+use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\City;
 
@@ -31,6 +32,10 @@ class Manager extends Model
 
     public function routes(){
         return $this->hasMany(Route::class)->withTrashed();
+    }
+
+    public function drivers(){
+        return $this->belongsToMany(Driver::class, 'manager_drivers')->withTimestamps()->withTrashed();
     }
 
     public function vehicles(){
