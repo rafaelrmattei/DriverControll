@@ -1,0 +1,3 @@
+npx tailwindcss -o public/css/tailwind.css --minify
+
+Lembrar de mim no login para não deslogar
